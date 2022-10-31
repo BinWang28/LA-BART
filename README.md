@@ -11,7 +11,7 @@ We test the code with python 3.7 and below requirements.
 pip install -r requirements.txt
 ```
 
-# Training and Testing Code
+# Training and Testing
 
 Baseline model (BART-Large) on DialogSum dataset
 ```
