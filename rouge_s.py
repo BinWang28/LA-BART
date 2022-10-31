@@ -1,18 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ###
-# File: /data07/binwang/research/abs_sum_ctrl_len/rouge_s.py
-# Project: /data07/binwang/research/abs_sum_ctrl_len
-# Created Date: 2022-01-05 13:21:47
 # Author: Bin Wang
 # -----
 # Copyright (c) 2022 National University of Singapore
-# 
 # -----
-# HISTORY:
-# Date&Time 			By	Comments
-# ----------			---	----------------------------------------------------------
-###
 
 import rouge
 import logging

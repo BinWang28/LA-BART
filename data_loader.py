@@ -1,22 +1,11 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ###
-# File: /data07/binwang/research/CTRLen_dev/data_loader.py
-# Project: /data07/binwang/research/CTRLen_dev
-# Created Date: 2022-06-29 00:45:32
 # Author: Bin Wang
 # -----
 # Copyright (c) 2022 National University of Singapore
-# 
 # -----
-# HISTORY:
-# Date&Time 			By	Comments
-# ----------			---	----------------------------------------------------------
-###
 
-
-
-# import lib
 import json
 import csv
 import random

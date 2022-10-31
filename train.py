@@ -1,24 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ###
-# File: /data07/binwang/research/abs_sum_ctrl_len/train.py
-# Project: /data07/binwang/research/abs_sum_ctrl_len
-# Created Date: 2021-12-03 10:23:45
 # Author: Bin Wang
 # -----
 # Copyright (c) 2022 National University of Singapore
-# 
 # -----
-# HISTORY:
-# Date&Time 			By	Comments
-# ----------			---	----------------------------------------------------------
-# 2022-01-25 10:54:58	B.W	compatability for label smoothing and sim loss
-# 2022-01-17 16:42:06	B.W	label smoothening added and works
-# 2022-01-14 12:50:19	B.W	TODO: add label smoothening function
-# 2022-01-10 14:26:43	B.W	bug fixing for loading model with 'accelerator'
-# 2022-01-10 10:12:13	B.W	add testing during training to test the discripancy between val/test
-# 2022-01-09 19:06:20	B.W	organize
-###
 
 import math
 import os

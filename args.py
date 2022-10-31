@@ -1,19 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ###
-# File: /data07/binwang/research/abs_sum_ctrl_len/args.py
-# Project: /data07/binwang/research/abs_sum_ctrl_len
-# Created Date: 2021-12-03 11:06:27
 # Author: Bin Wang
 # -----
 # Copyright (c) 2022 National University of Singapore
-# 
 # -----
-# HISTORY:
-# Date&Time 			By	Comments
-# ----------			---	----------------------------------------------------------
-# 2022-01-09 19:01:24	B.W	organize
-###
 
 import argparse
 

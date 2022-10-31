@@ -1,22 +1,13 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ###
-# File: /data07/binwang/research/abs_sum_ctrl_len/utils.py
-# Project: /data07/binwang/research/abs_sum_ctrl_len
-# Created Date: 2021-12-29 15:31:50
 # Author: Bin Wang
 # -----
 # Copyright (c) 2022 National University of Singapore
-# 
 # -----
-# HISTORY:
-# Date&Time 			By	Comments
-# ----------			---	----------------------------------------------------------
-###
 
 import json
 import math
-
 
 from tqdm import tqdm
 from collections import Counter
@@ -25,9 +16,7 @@ import nltk
 from nltk.util import ngrams
 from nltk import word_tokenize,sent_tokenize
 
-
 from datasets import Dataset
-
 
 
 def label_smoothed_nll_loss(lprobs, target, epsilon, ignore_index=-100):

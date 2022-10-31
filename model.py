@@ -1,20 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ###
-# File: /data07/binwang/research/abs_sum_ctrl_len/model.py
-# Project: /data07/binwang/research/abs_sum_ctrl_len
-# Created Date: 2021-12-22 10:20:32
 # Author: Bin Wang
 # -----
 # Copyright (c) 2022 National University of Singapore
-# 
 # -----
-# HISTORY:
-# Date&Time 			By	Comments
-# ----------			---	----------------------------------------------------------
-# 2022-01-24 09:43:42	B.W	add label smoothing loss
-###
-
 
 import torch
 import torch.nn as nn
