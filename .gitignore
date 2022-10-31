@@ -130,4 +130,5 @@ dmypy.json
 
 # Added
 github_update.sh
-output/
+output/0/
+output/cache/
