@@ -11,27 +11,26 @@ We test the code with python 3.7 and below requirements.
 pip install -r requirements.txt
 ```
 
-# Dialogue Summarization Demo
-
-In this part, we provide a demo to generated summary given a dialogue and desired output lengths
-
-First, download the trained model from xxx and put it in folder xxx
-
-Demo with different output lengths
-```
-bash xxx
-```
-
 # Training and Testing Code
 
-Baseline model
+Baseline model (BART-Large) on DialogSum dataset
 ```
-bash xxx
+bash 1_dialogsum_bart_large.sh
 ```
 
-LA-BART model with ground-truth summary length
+Baseline model (BART-Large) on SAMSum dataset
 ```
-bash xxx
+bash 2_samsum_bart_large.sh
+```
+
+LA-BART model (BART-Large) on DialogSum dataset
+```
+bash 3_dialogsum_la_bart_large.sh
+```
+
+LA-BART model (BART-Large) on SAMSum dataset
+```
+bash 4_samsum_la_bart_large.sh
 ```
 
 ## References

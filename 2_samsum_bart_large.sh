@@ -1,3 +1,11 @@
+#!/bin/bash
+#SBATCH --output=./2.log
+#SBATCH --ntasks=1
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=5
+#SBATCH --partition=new
+#SBATCH --exclude=hlt06,ttnusa9,ttnusa10
+
 
 echo "= = = = = = = = = = = = = ="
 echo "The project is running..."
@@ -7,15 +15,15 @@ start=`date +%s`
 echo "= = = = = = = = = = = = = ="
 
 python train.py \
-    --len_input 'real' \
+    --len_input 'no' \
     --len_output 'no' \
-    --output_dir ./output/0 \
-    --train_file ./data/dialogsum/dialogsum.train.jsonl \
-    --validation_file ./data/dialogsum/dialogsum.dev.jsonl \
-    --test_file ./data/dialogsum/dialogsum.test.jsonl \
+    --output_dir ./output/2 \
+    --train_file ./data/samsum/train.csv \
+    --validation_file ./data/samsum/val.csv \
+    --test_file ./data/samsum/test.csv \
     --text_column dialogue \
     --summary_column summary \
-    --model_name_or_path facebook/bart-base \
+    --model_name_or_path facebook/bart-large \
     --model_type bart \
     --max_source_length 1024 \
     --min_target_length 1 \
@@ -27,7 +35,7 @@ python train.py \
     --length_penalty 1.0 \
     --num_train_epochs 15 \
     --per_device_train_batch_size 4 \
-    --gradient_accumulation_steps 32 \
+    --gradient_accumulation_steps 4 \
     --per_device_eval_batch_size 8 \
     --per_device_test_batch_size 8 \
     --num_warmup_steps 0 \

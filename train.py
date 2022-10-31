@@ -531,13 +531,8 @@ def main():
             for index, value in all_out_len.items():
                 f.write(str(index) + ': ' + str(value) + '\n')
 
-        var_len_dist_plot(args.output_dir, all_out_len)
-                
-
-
-
+               
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # main process
-
 if __name__ == "__main__":
     main()

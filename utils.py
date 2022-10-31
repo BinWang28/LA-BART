@@ -102,17 +102,6 @@ def len_adjust(args, split_dict, split_type=None):
                 new_dialogue = 'Length of Summary: {}. Dialogue: '.format(length) + dialogue
                 new_dialogue_list.append(new_dialogue)
 
-    '''
-    # only for test
-    if split_type == 'test':
-        dialogue = dialogue_list[3]
-        new_dialogue_list = []
-        for sum_len in range(5,101,5):
-            new_dialogue = 'Length of Summary: {}. Dialogue: '.format(sum_len) + dialogue
-            new_dialogue_list.append(new_dialogue)
-    #
-    '''
-
     if args.len_output == 'no' or split_type == 'val' or split_type == 'test':
         new_summary_list = summary_list
 
@@ -122,14 +111,6 @@ def len_adjust(args, split_dict, split_type=None):
             sum_len = len(summary.split(' '))
             new_summary = 'Length of Summary: {}. Summary: '.format(sum_len) + summary
             new_summary_list.append(new_summary)
-
-    '''
-    #
-    if split_type == 'test':
-        id_list = id_list[:20]
-        new_summary_list = new_summary_list[:20]
-    #
-    '''
 
     split_dict = {
                 'id'      : id_list,
