@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=5
 #SBATCH --partition=new
-#SBATCH --exclude=hlt06,ttnusa9,ttnusa10
+##SBATCH --exclude=hlt06,ttnusa9,ttnusa10
 
 
 echo "= = = = = = = = = = = = = ="

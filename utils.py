@@ -67,7 +67,7 @@ def len_adjust(args, split_dict, split_type=None):
     if args.len_input == 'no':
         new_dialogue_list = dialogue_list
 
-    if args.len_input == 'surface':
+    elif args.len_input == 'surface':
         new_dialogue_list = []
         for dialogue in dialogue_list:
             utt_diag  = dialogue.split('\n')

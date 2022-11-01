@@ -26,7 +26,7 @@ from transformers.file_utils import is_offline_mode
 from transformers.utils.versions import require_version
 
 from args import parse_args
-from data_loader import raw_data_loader, data_processor, var_len_data_processor
+from data_loader import raw_data_loader, data_processor
 from model_loader import model_loader
 from rouge_s import py_rouge_scores
 from utils import label_smoothed_nll_loss, postprocess_text
@@ -250,6 +250,7 @@ def main():
                     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
                 if isinstance(generated_tokens, tuple):
                     generated_tokens = generated_tokens[0]
+
                 decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
                 decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
@@ -273,7 +274,6 @@ def main():
         logger.info("")
         logger.info("Rouge score on val set after epoch {}".format(epoch+1))
         eval_results = py_rouge_scores(val_predict, val_groundtruth)
-        val_results.append(val_results)
 
         if best_r2_f1 is None:
             best_r2_f1 = eval_results
@@ -307,10 +307,10 @@ def main():
     logger.info("Loading Best Result is at epoch {} for Testing".format(best_epoch))
 
     unwrapped_model = accelerator.unwrap_model(model)
-    config = config.from_pretrained(args.output_dir+'/best')
-    tokenizer = tokenizer.from_pretrained(args.output_dir+'/best', config=config)
+    config          = config.from_pretrained(args.output_dir+'/best')
+    tokenizer       = tokenizer.from_pretrained(args.output_dir+'/best', config=config)
     unwrapped_model = unwrapped_model.from_pretrained(args.output_dir+'/best', config=config)
-    model = accelerator.prepare(unwrapped_model)
+    model           = accelerator.prepare(unwrapped_model)
 
     if args.model_type == 'bart' or args.model_type == 't5':
         task_specific_params = model.config.task_specific_params
@@ -367,12 +367,6 @@ def main():
 
     print(raw_datasets['test']['dialogue'][0])
 
-    #print("")
-    #for item in test_predict:
-    #    print(item)
-    #import pdb; pdb.set_trace()
-
-
     if args.len_output == 'real':
         new_test_predict = []
         for sample in test_predict:
@@ -382,23 +376,12 @@ def main():
             except:
                 new_test_predict.append(sample)
         test_predict = new_test_predict
-    else:
-        new_test_predict = test_predict
 
     logger.info("")
-    logger.info("Rouge score on test set")
+    logger.info("ROUGE score on test set")
     test_scores = py_rouge_scores(test_predict, test_groundtruth)
     logger.info("")
 
-
-    # Save train/val/test scores
-    with open(args.output_dir+'/scores.txt', 'w') as f:
-        for item in val_results:
-            f.write('\n Validation Scores:\n')
-            f.write(pprint.pformat(item, indent=4))
-            f.write('\n')
-        f.write('\n Testing Scores:\n')
-        f.write(pprint.pformat(test_scores, indent=4))
 
     # Save generated summaries
     if args.len_input == 'predict':
@@ -437,99 +420,6 @@ def main():
                 test_predict_s = test_predict_s.encode('ascii', 'ignore').decode('ascii')
                 f.write(test_predict_s)
 
-
-    # =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  = Length Control Ability Test =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  = 
-    if args.debug:
-    #if args.ctrlen_model:
-        logging.info('\n'*5)
-        logging.info('Test Length Control Ability')
-        var_len_dataloaders, indexes = var_len_data_processor(logger, args, accelerator, raw_datasets, tokenizer, model)
-        logging.info('Finish data preparation' + '\n'*5)
-
-        all_out_len   = {}
-        for index, each_dataloader in enumerate(tqdm(var_len_dataloaders)):
-            each_dataloader = accelerator.prepare(each_dataloader)
-            
-            cur_index = indexes[index]
-
-            total_out_len = []
-            test_predict  = []
-            for step, batch in enumerate(each_dataloader):
-
-                with torch.no_grad():
-                    generated_tokens = accelerator.unwrap_model(model).generate(
-                        batch["input_ids"],
-                        attention_mask=batch["attention_mask"],
-                    )
-                    generated_tokens = accelerator.pad_across_processes(
-                        generated_tokens, dim=1, pad_index=tokenizer.pad_token_id
-                    )
-                    labels = batch["labels"]
-
-                    if not args.pad_to_max_length:
-                        # If we did not pad to max length, we need to pad the labels too
-                        labels = accelerator.pad_across_processes(batch["labels"], dim=1, pad_index=tokenizer.pad_token_id)
-
-                    generated_tokens = accelerator.gather(generated_tokens).cpu().numpy()
-                    labels = accelerator.gather(labels).cpu().numpy()
-
-                    if args.ignore_pad_token_for_loss:
-                        # Replace -100 in the labels as we can't decode them.
-                        labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-                    if isinstance(generated_tokens, tuple):
-                        generated_tokens = generated_tokens[0]
-
-                    decoded_preds  = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
-                    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-
-                    decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
-
-                    decoded_preds  = [' '.join(sent.split('\n')) for sent in decoded_preds]
-                    decoded_labels = [' '.join(sent.split('\n')) for sent in decoded_labels]
-
-                test_predict.extend(decoded_preds)
-
-                att_out = tokenizer(decoded_preds)['attention_mask']
-                att_out_len = [len(out) for out in att_out]
-                total_out_len.extend(att_out_len)
-
-
-            all_out_len[index+args.len_start] = total_out_len
-
-            # save generated summary with controllable length
-            if index == 0:
-                os.makedirs(args.output_dir+'/gen_samples_with_ctrl_len', exist_ok=True)
-                for i in range(len(test_predict)):
-                    test_id        = raw_datasets['test']['id'][cur_index[i]]
-                    test_dialogue  = raw_datasets['test']['dialogue'][cur_index[i]]
-                    test_summary   = raw_datasets['test']['summary'][cur_index[i]]
-                    test_predict_s = test_predict[i]
-
-                    with open(args.output_dir+'/gen_samples_with_ctrl_len/'+str(test_id)+'.txt', 'w') as f:
-                        test_dialogue = test_dialogue.encode('ascii', 'ignore').decode('ascii')
-                        f.write(test_dialogue)
-                        f.write('\n\n')
-                        f.write('Golden Summary:\n')
-                        test_summary = test_summary.encode('ascii', 'ignore').decode('ascii')
-                        f.write(test_summary)
-                        f.write('\n\n')
-                        f.write('Generate Summary:{} - {}\n'.format(args.len_start+index, total_out_len[i]))
-                        test_predict_s = test_predict_s.encode('ascii', 'ignore').decode('ascii')
-                        f.write(test_predict_s)
-            else:
-                for i in range(len(test_predict)):
-                    test_id        = raw_datasets['test']['id'][cur_index[i]]
-                    test_predict_s = test_predict[i]
-
-                    with open(args.output_dir+'/gen_samples_with_ctrl_len/'+str(test_id)+'.txt', 'a') as f:
-                        f.write('\n\n')
-                        f.write('Generate Summary:{} - {}\n'.format(args.len_start+index, total_out_len[i]))
-                        test_predict_s = test_predict_s.encode('ascii', 'ignore').decode('ascii')
-                        f.write(test_predict_s)
-
-        with open(args.output_dir+'/'+'all_out_len.txt', 'w') as f:
-            for index, value in all_out_len.items():
-                f.write(str(index) + ': ' + str(value) + '\n')
 
                
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =

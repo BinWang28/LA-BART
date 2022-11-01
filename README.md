@@ -17,21 +17,27 @@ Baseline model (BART-Large) on DialogSum dataset
 ```
 bash 1_dialogsum_bart_large.sh
 ```
+ROUGE-1: 47.36, ROUGE-2: 21.23, ROUGE-L: 44.88
 
 Baseline model (BART-Large) on SAMSum dataset
 ```
 bash 2_samsum_bart_large.sh
 ```
+ROUGE-1: 52.31, ROUGE-2: 27.57, ROUGE-L: 49.57
 
 LA-BART model (BART-Large) on DialogSum dataset
 ```
 bash 3_dialogsum_la_bart_large.sh
 ```
+ROUGE-1: 49.42, ROUGE-2: 22.37, ROUGE-L: 46.93
 
 LA-BART model (BART-Large) on SAMSum dataset
 ```
 bash 4_samsum_la_bart_large.sh
 ```
+ROUGE-1: 57.44, ROUGE-2: 30.96, ROUGE-L: 53.23
+
+The above hyperparameters are not carefully tuned. We can still see the effect of controlling the output length.
 
 ## References
 
