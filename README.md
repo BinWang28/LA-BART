@@ -17,7 +17,7 @@ Baseline model (BART-Large) on DialogSum dataset
 ```
 bash 1_dialogsum_bart_large.sh
 ```
-ROUGE-1: 47.36, ROUGE-2: 21.23, ROUGE-L: 44.88
+**ROUGE-1: 47.36, ROUGE-2: 21.23, ROUGE-L: 44.88**
 
 Baseline model (BART-Large) on SAMSum dataset
 ```
