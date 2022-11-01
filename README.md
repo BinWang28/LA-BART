@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 # Training and Testing
 
-Baseline model (BART-Large) on DialogSum dataset
+## Baseline model (BART-Large) on DialogSum dataset
 ```
 bash 1_dialogsum_bart_large.sh
 ```
